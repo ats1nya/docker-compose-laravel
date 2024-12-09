@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "33061:3306"
     environment:
       MYSQL_DATABASE: api
       MYSQL_USER: api_user
@@ -93,7 +93,26 @@ services:
     networks:
       - laravel
 
+  minio:
+    image: 'minio/minio:latest'
+    ports:
+      - '${FORWARD_MINIO_PORT:-9001}:9000'
+      - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+    environment:
+      MINIO_ROOT_USER: 'sail'
+      MINIO_ROOT_PASSWORD: 'password'
+    volumes:
+      - 'minio_data:/data'
+    networks:
+      - laravel
+    command: minio server /data --console-address ":8900"
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      retries: 3
+      timeout: 5s
+
   artisan:
+    container_name: artisan
     build:
       context: ./dockerfiles
       dockerfile: php.dockerfile
@@ -110,6 +129,7 @@ services:
 
 volumes:
   mysql_data:
+  minio_data:
 
 networks:
   laravel:
