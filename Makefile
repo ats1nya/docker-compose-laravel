@@ -17,5 +17,8 @@ install:
 	cp src/.env.example src/.env
 	docker compose run --rm artisan key:generate --ansi
 
+npm-run-dev:
+	docker compose run node run dev
+
 shell:
 	docker compose exec php sh

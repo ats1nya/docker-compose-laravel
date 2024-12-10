@@ -81,7 +81,7 @@ services:
 
   node:
     container_name: node
-    image: node:14-alpine
+    image: node:14
     volumes:
       - ./src:/var/www/html
     ports:
@@ -89,7 +89,7 @@ services:
       - "3001:3001"
       - "5173:5173"
     working_dir: /var/www/html
-#    entrypoint: [ 'npm' ]
+    entrypoint: [ 'npm' ]
     networks:
       - laravel
 
