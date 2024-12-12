@@ -6,6 +6,9 @@ ARG GID
 ENV UID=${UID}
 ENV GID=${GID}
 
+ENV TERM xterm
+ENV ZSH /root/.oh-my-zsh
+
 RUN mkdir -p /var/www/html
 
 WORKDIR /var/www/html
@@ -25,6 +28,7 @@ RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
 RUN docker-php-ext-install pdo pdo_mysql
 
 RUN apk update && \
+    apk add git && \
     apk add mysql mysql-client && \
     rm -f /var/cache/apk/*
 
@@ -32,7 +36,14 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && curl -L https://github.com/phpredis/phpredis/archive/5.3.4.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
     && echo 'redis' >> /usr/src/php-available-exts \
     && docker-php-ext-install redis
-    
+
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.1/zsh-in-docker.sh)" -- \
+    -t robbyrussell \
+    -p git \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-completions \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting
+
 USER laravel
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
