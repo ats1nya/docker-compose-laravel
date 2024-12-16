@@ -59,3 +59,20 @@ shell-root:
 
 shell-node:
 	$(DC) run --rm node sh
+
+# Laravel artisan commands
+route:
+	$(DC) exec $(APP) php artisan route:list --except-vendor
+
+ssh-dev:
+	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20
+
+ssh-deploy-dev:
+	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20 'cd casino.nuxdev.ga && git pull origin dev'
+
+ssh-deploy-dev-npm:
+	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20 '\
+		cd casino.nuxdev.ga && \
+		git pull origin dev && \
+		nvm use 10 && npm run dev \
+	'

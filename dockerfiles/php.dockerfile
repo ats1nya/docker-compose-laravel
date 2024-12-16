@@ -6,8 +6,8 @@ ARG GID
 ENV UID=${UID}
 ENV GID=${GID}
 
-ENV TERM xterm
-ENV ZSH /root/.oh-my-zsh
+ENV TERM=xterm
+ENV ZSH=/root/.oh-my-zsh
 
 RUN mkdir -p /var/www/html
 
