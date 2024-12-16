@@ -3,20 +3,20 @@ DC = docker compose
 USER = ats1nya
 APP = php
 
+LOCAL_USER = a_tsinya
+SSH_USER = www-data
+SSH_HOST = 172.32.29.20
+REMOTE_DIR = casino.nuxdev.ga
+
 RED=\033[0;31m
 GREEN=\033[0;32m
 BLUE=\033[0;34m
 YELLOW=\033[0;33m
 NC=\033[0m
 
-
-build:
-	$(DC) build
-
-rebuild: down
-	$(DC) build --no-cache
-
+# Docker commands
 up:
+	@clear
 	@echo '$(GREEN) 🐬 Docker UP...$(NC)';
 	@$(DC) up -d --remove-orphans --force-recreate
 
@@ -27,6 +27,12 @@ down:
 stop:
 	@echo '$(YELLOW) 🐬 Docker Stop.$(NC)';
 	@$(DC) stop
+
+build:
+	$(DC) build
+
+rebuild: down
+	$(DC) build --no-cache
 
 restart: down up
 
@@ -64,15 +70,16 @@ shell-node:
 route:
 	$(DC) exec $(APP) php artisan route:list --except-vendor
 
+# Deploy commands
 ssh-dev:
-	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20
+	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST)
 
 ssh-deploy-dev:
-	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20 'cd casino.nuxdev.ga && git pull origin dev'
+	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST) 'cd $(REMOTE_DIR) && git pull origin dev'
 
 ssh-deploy-dev-npm:
-	ssh -i ~/.ssh/a_tsinya www-data@172.32.29.20 '\
-		cd casino.nuxdev.ga && \
+	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST) '\
+		cd $(REMOTE_DIR) && \
 		git pull origin dev && \
 		nvm use 10 && npm run dev \
 	'
