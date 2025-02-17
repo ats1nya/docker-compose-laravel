@@ -66,6 +66,9 @@ shell-root:
 shell-node:
 	$(DC) run --rm node sh
 
+lint:
+	$(DC) exec $(APP) ./vendor/bin/pint --diff=origin/master
+
 # Laravel artisan commands
 route:
 	$(DC) exec $(APP) php artisan route:list --except-vendor
