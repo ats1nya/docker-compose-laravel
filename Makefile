@@ -53,6 +53,9 @@ npm-watch:
 npm-dev:
 	$(DC) run --rm node npm run dev
 
+npm:
+	$(DC) run --rm node npm run $(run)
+
 shell:
 	@clear
 	@echo '$(GREEN) ⚡ Entering Bash Shell...$(NC)';
@@ -66,8 +69,14 @@ shell-root:
 shell-node:
 	$(DC) run --rm node sh
 
+shell-db:
+	$(DC) exec -it db bash
+
 lint:
 	$(DC) exec $(APP) ./vendor/bin/pint --diff=origin/master
+
+test:
+	$(DC) exec $(APP) php artisan test
 
 # Laravel artisan commands
 route:
@@ -78,7 +87,7 @@ ssh-dev:
 	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST)
 
 ssh-deploy-dev:
-	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST) 'cd $(REMOTE_DIR) && git pull origin dev'
+	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST) 'cd $(REMOTE_DIR) && git pull origin dev && php artisan optimize:clear && php artisan queue:restart'
 
 ssh-deploy-dev-npm:
 	ssh -i ~/.ssh/$(LOCAL_USER) $(SSH_USER)@$(SSH_HOST) '\

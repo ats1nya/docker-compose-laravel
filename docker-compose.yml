@@ -34,6 +34,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
     networks:
       - laravel
 
