@@ -64,22 +64,6 @@ services:
     networks:
       - laravel
 
-  composer:
-    container_name: composer
-    build:
-      context: ./dockerfiles
-      dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    volumes:
-      - ./src:/var/www/html
-    depends_on:
-      - php
-    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
-    networks:
-      - laravel
-
   node:
     container_name: node
     image: node:14
@@ -111,22 +95,6 @@ services:
       test: [ "CMD", "mc", "ready", "local" ]
       retries: 3
       timeout: 5s
-
-  artisan:
-    container_name: artisan
-    build:
-      context: ./dockerfiles
-      dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    volumes:
-      - ./src:/var/www/html:delegated
-    depends_on:
-      - db
-    entrypoint: [ 'php', '/var/www/html/artisan' ]
-    networks:
-      - laravel
 
 volumes:
   mysql_data:

@@ -85,6 +85,13 @@ RUN apk add --no-cache \
     && docker-php-ext-install zip \
     && apk del build-base
 
+# Imagisk
+RUN apk add $PHPIZE_DEPS && \
+    apk add --virtual .imagick-deps imagemagick imagemagick-dev && \
+    pecl install imagick && \
+    docker-php-ext-enable imagick && \
+    apk del --purge $PHPIZE_DEPS
+
 USER laravel
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
