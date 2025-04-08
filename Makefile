@@ -76,7 +76,7 @@ lint:
 	$(DC) exec $(APP) ./vendor/bin/pint --diff=origin/master
 
 test:
-	$(DC) exec $(APP) php artisan test
+	$(DC) exec $(APP) vendor/bin/phpunit -c ./src/phpunit.xml.dist
 
 # Laravel artisan commands
 route:

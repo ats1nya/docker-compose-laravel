@@ -26,12 +26,8 @@ services:
     tty: true
     ports:
       - "33061:3306"
-    environment:
-      MYSQL_DATABASE: api
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: passpass
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    env_file:
+      - src/.env
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql/conf.d:/etc/mysql/conf.d
