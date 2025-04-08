@@ -26,11 +26,16 @@ services:
     tty: true
     ports:
       - "33061:3306"
-    env_file:
-      - src/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: casino
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: passpass
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./dockerfiles/mysql/conf.d:/etc/mysql/conf.d
     networks:
       - laravel
 
